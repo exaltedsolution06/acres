@@ -11,12 +11,12 @@ class PropertySearch
     /** Filters accepted from the query string and stored in saved searches. */
     public const FILTER_KEYS = [
         'purpose', 'city_id', 'locality_id', 'pin_code', 'q', 'category_ids', 'price_min', 'price_max', 'bhk', 'area_min', 'area_max',
-        'furnishing', 'age_max', 'floor_min', 'floor_max', 'amenities', 'posted_by', 'availability', 'tenant_preference',
+        'furnishing', 'age_max', 'floor_min', 'floor_max', 'amenities', 'posted_by', 'availability', 'tenant_preference', 'verified',
     ];
 
     public function query(array $f, string $sort = 'recommended'): Builder
     {
-        $q = Property::query()->visible()->with(['category', 'city', 'locality', 'cover']);
+        $q = Property::query()->visible()->with(['category', 'city', 'locality', 'cover', 'user:id,status,owner_verified_until,broker_verified_until']);
 
         $q->when($f['purpose'] ?? null, fn ($b, $v) => $b->where('purpose', $v))
             ->when($f['city_id'] ?? null, fn ($b, $v) => $b->where('city_id', $v))
@@ -32,6 +32,16 @@ class PropertySearch
             ->when($f['posted_by'] ?? null, fn ($b, $v) => $b->where('posted_by', $v))
             ->when($f['availability'] ?? null, fn ($b, $v) => $b->where('availability', $v))
             ->when($f['tenant_preference'] ?? null, fn ($b, $v) => $b->whereIn('tenant_preference', [$v, 'any']));
+
+        // "Verified": documents reviewed for the property, or the poster is verified for the role they posted as.
+        if (! empty($f['verified'])) {
+            $now = now()->toDateTimeString();
+            $q->where(function ($w) use ($now) {
+                $w->where('properties.documents_reviewed_until', '>', $now)
+                    ->orWhereExists(fn ($s) => $s->selectRaw('1')->from('users')->whereColumn('users.id', 'properties.user_id')
+                        ->whereRaw("((properties.posted_by = 'owner' and users.owner_verified_until > ?) or (properties.posted_by = 'broker' and users.broker_verified_until > ?))", [$now, $now]));
+            });
+        }
 
         if (! empty($f['bhk'])) {
             $values = array_map('intval', (array) $f['bhk']);

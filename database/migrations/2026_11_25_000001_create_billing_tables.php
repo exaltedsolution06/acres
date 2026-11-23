@@ -42,8 +42,8 @@ return new class extends Migration
             $t->string('applies_to', 20)->default('all');    // all | subscription | credit_pack | promotion
             $t->unsignedInteger('usage_limit')->nullable();
             $t->unsignedInteger('per_user_limit')->default(1);
-            $t->timestamp('starts_at')->nullable();
-            $t->timestamp('ends_at')->nullable();
+            $t->dateTime('starts_at');
+			$t->dateTime('ends_at');
             $t->boolean('is_active')->default(true);
             $t->timestamps();
         });
@@ -104,7 +104,7 @@ return new class extends Migration
             $t->string('type', 12)->default('invoice'); // invoice | credit_note
             $t->string('number', 40)->unique();
             $t->unsignedBigInteger('related_invoice_id')->nullable();
-            $t->timestamp('issued_at');
+            $t->dateTime('issued_at');
             $t->json('billing');
             $t->json('lines');
             $t->unsignedBigInteger('subtotal_paise');
@@ -143,8 +143,8 @@ return new class extends Migration
             $t->foreignId('user_id')->constrained()->cascadeOnDelete();
             $t->foreignId('promotion_package_id')->constrained()->restrictOnDelete();
             $t->foreignId('payment_id')->nullable()->constrained()->nullOnDelete();
-            $t->timestamp('starts_at');
-            $t->timestamp('ends_at');
+            $t->dateTime('starts_at');
+			$t->dateTime('ends_at');
             $t->boolean('homepage')->default(false);
             $t->string('status', 10)->default('active'); // active | refunded
             $t->timestamps();

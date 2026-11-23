@@ -38,6 +38,7 @@ class Property extends Model
         'published_at' => 'datetime',
         'expires_at' => 'datetime',
         'featured_until' => 'datetime',
+        'documents_reviewed_until' => 'datetime',
         'homepage_until' => 'datetime',
         'latitude' => 'float',
         'longitude' => 'float',
@@ -146,6 +147,24 @@ class Property extends Model
     }
 
     // ----- helpers -----
+    /** Documents reviewed for this property, or its poster is verified for the role they posted as. */
+    public function isVerified(): bool
+    {
+        return $this->verificationLabel() !== null;
+    }
+
+    /** What exactly was verified, for the badge text. Never implies legal title verification. */
+    public function verificationLabel(): ?string
+    {
+        if ($this->documents_reviewed_until?->isFuture()) {
+            return config('trust.types.property_documents.label');
+        }
+
+        $until = $this->posted_by === 'broker' ? $this->user?->broker_verified_until : $this->user?->owner_verified_until;
+
+        return $until?->isFuture() ? config('trust.types.'.($this->posted_by === 'broker' ? 'broker' : 'owner').'.label') : null;
+    }
+
     public function isFeatured(): bool
     {
         return $this->featured_until !== null && $this->featured_until->isFuture();

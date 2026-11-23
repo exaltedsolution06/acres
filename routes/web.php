@@ -55,3 +55,5 @@ require __DIR__.'/engagement.php';
 require __DIR__.'/admin_engagement.php';
 require __DIR__.'/billing.php';
 require __DIR__.'/admin_billing.php';
+require __DIR__.'/trust.php';
+require __DIR__.'/admin_trust.php';

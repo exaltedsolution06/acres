@@ -20,6 +20,7 @@
         <div class="text-muted mb-3">{{ $property->typeLabel() }} · {{ $property->locality->name }}, {{ $property->city->name }}@if($property->pin_code) - {{ $property->pin_code }}@endif</div>
 
         @unless($gone || $limitReached)
+            @include('partials.trust-badges', ['badges' => $propertyBadges])
             @php $photos = $property->images->where('type', 'photo')->values(); @endphp
             @if($photos->isNotEmpty())
                 <img src="{{ $photos[0]->url() }}" alt="{{ $photos[0]->alt }}" class="img-fluid rounded mb-2 w-100" style="max-height:420px;object-fit:cover">
@@ -69,6 +70,7 @@
             @unless($gone || $limitReached)
                 <hr>
                 <div class="small text-muted mb-2">Listed by {{ $property->user->name }} ({{ $property->posted_by }})</div>
+                @include('partials.trust-badges', ['badges' => $posterBadges])
                 @if($contact)
                     <div class="alert alert-success mb-0"><div class="small">{{ $contact['masked'] ? 'Masked number' : 'Phone number' }}</div><div class="fs-5 fw-semibold">+91 {{ $contact['mobile'] }}</div></div>
                 @else
@@ -103,6 +105,12 @@
                                 <button class="btn btn-sm btn-primary w-100">Send enquiry</button>
                             </form>
                         @endif
+                        <details class="mt-3"><summary class="small text-muted" style="cursor:pointer">Report this listing</summary>
+                            <form method="POST" action="{{ route('property.report', $property) }}" class="mt-2">@csrf
+                                <select name="reason" class="form-select form-select-sm mb-2" required><option value="">What is wrong?</option>@foreach(config('trust.report_reasons') as $key => $label)<option value="{{ $key }}">{{ $label }}</option>@endforeach</select>
+                                <textarea name="details" rows="2" class="form-control form-control-sm mb-2" maxlength="1000" placeholder="Details (required for Something else)"></textarea>
+                                <button class="btn btn-sm btn-outline-danger">Send report</button>
+                            </form></details>
                     @endunless
                 @endauth
             @endunless

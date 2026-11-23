@@ -19,6 +19,9 @@
         <ul class="nav nav-pills flex-column gap-1">
             <li><a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
             <li><a class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}" href="{{ route('admin.properties.index') }}">Properties</a></li>
+            @php $pendingVerifications = \App\Models\VerificationRequest::where('status', 'pending')->count(); $openReports = \App\Models\PropertyReport::where('status', 'open')->count(); @endphp
+            <li><a class="nav-link {{ request()->routeIs('admin.verifications.*') ? 'active' : '' }}" href="{{ route('admin.verifications.index') }}">Verifications @if($pendingVerifications)<span class="badge text-bg-warning">{{ $pendingVerifications }}</span>@endif</a></li>
+            <li><a class="nav-link {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}" href="{{ route('admin.reports.index') }}">Reports @if($openReports)<span class="badge text-bg-danger">{{ $openReports }}</span>@endif</a></li>
             <li><a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">Users</a></li>
             @if(auth('admin')->user()?->isSuper())
                 <li><a class="nav-link {{ request()->routeIs('admin.packages.*') ? 'active' : '' }}" href="{{ route('admin.packages.index') }}">Packages</a></li>

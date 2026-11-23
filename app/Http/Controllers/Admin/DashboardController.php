@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\PropertyReport;
+use App\Models\VerificationRequest;
 use App\Models\Role;
 use App\Models\Subscription;
 use App\Models\User;
@@ -34,6 +36,8 @@ class DashboardController extends Controller
             'revenueTotal' => (clone $paid)->sum('total_paise') / 100,
             'revenueMonth' => (clone $paid)->where('paid_at', '>=', $monthStart)->sum('total_paise') / 100,
             'registrationsToday' => User::where('created_at', '>=', now($tz)->startOfDay()->utc())->count(),
+            'pendingVerifications' => VerificationRequest::where('status', 'pending')->count(),
+            'openReports' => PropertyReport::where('status', 'open')->count(),
             'registrations7d' => User::where('created_at', '>=', now($tz)->subDays(6)->startOfDay()->utc())->count(),
             'topPackages' => Subscription::query()
                 ->join('packages', 'packages.id', '=', 'subscriptions.package_id')

@@ -26,5 +26,7 @@ return [
         'payment.success' => 'Payment received (receipt)',
         'refund.update' => 'Refund processed or declined',
         'subscription.expiring' => 'Plan ending soon',
+        'verification.reviewed' => 'Verification approved, declined or removed',
+        'report.update' => 'Update on a listing report (to the reporter)',
     ],
 ];

@@ -28,7 +28,7 @@ trait MakesProperties
 
     protected function adminUser(string $role = 'super_admin'): Admin
     {
-        return Admin::create(['name' => 'Admin', 'email' => $role.'@example.com', 'password' => 'secret-pass-123', 'role' => $role, 'is_active' => true]);
+        return Admin::firstOrCreate(['email' => $role.'@example.com'], ['name' => 'Admin', 'password' => 'secret-pass-123', 'role' => $role, 'is_active' => true]);
     }
 
     protected function subscribeTo(User $user, string $packageSlug): void

@@ -5,7 +5,7 @@
 <div class="row g-3 mb-4">
     @foreach([
         ['Total users', $totalUsers], ['Suspended', $suspended], ['Registrations today', $registrationsToday],
-        ['Registrations (7 days)', $registrations7d], ['Active subscriptions', $activeSubs], ['Expired subscriptions', $expiredSubs],
+        ['Registrations (7 days)', $registrations7d], ['Verifications waiting', $pendingVerifications], ['Open reports', $openReports], ['Active subscriptions', $activeSubs], ['Expired subscriptions', $expiredSubs],
         ['Revenue (all time)', '₹'.number_format($revenueTotal, 2)], ['Revenue (this month)', '₹'.number_format($revenueMonth, 2)],
     ] as [$label, $value])
         <div class="col-6 col-lg-3"><div class="card h-100 shadow-sm"><div class="card-body">

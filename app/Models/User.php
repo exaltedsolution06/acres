@@ -27,6 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'mobile_verified_at' => 'datetime',
+            'owner_verified_until' => 'datetime',
+            'broker_verified_until' => 'datetime',
             'password' => 'hashed',
         ];
     }

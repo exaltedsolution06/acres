@@ -41,6 +41,7 @@
             <input type="number" min="0" name="age_max" value="{{ $filters['age_max'] ?? '' }}" class="form-control form-control-sm mb-2">
             <label class="form-label mb-1">Amenities</label>
             <div class="mb-2" style="max-height:120px;overflow:auto">@foreach($amenities as $a)<div class="form-check"><input class="form-check-input" type="checkbox" name="amenities[]" value="{{ $a->id }}" id="a{{ $a->id }}" @checked(in_array($a->id, array_map('intval', (array) ($filters['amenities'] ?? []))))><label class="form-check-label" for="a{{ $a->id }}">{{ $a->name }}</label></div>@endforeach</div>
+            <div class="form-check mb-2"><input class="form-check-input" type="checkbox" name="verified" value="1" id="verified" @checked(! empty($filters['verified']))><label class="form-check-label" for="verified">Verified listings only</label></div>
             <input type="hidden" name="sort" value="{{ $sort }}">
             <button class="btn btn-primary btn-sm">Apply filters</button>
             <a class="btn btn-link btn-sm" href="{{ $formAction }}">Clear</a>

@@ -20,6 +20,7 @@
                 <a class="btn btn-sm btn-outline-secondary position-relative" href="{{ route('notifications.index') }}">Alerts@if($unread) <span class="badge text-bg-danger">{{ $unread }}</span>@endif</a>
                 <a class="btn btn-sm btn-link" href="{{ route('saved.properties') }}">Saved</a>
                 <a class="btn btn-sm btn-link" href="{{ route('billing.index') }}">Billing</a>
+                <a class="btn btn-sm btn-link" href="{{ route('verification.index') }}">Verification</a>
                 <a class="btn btn-sm btn-link" href="{{ route('enquiries.index') }}">Enquiries</a>
                 <a class="btn btn-sm btn-link" href="{{ route('requirements.index') }}">Requirements</a>
                 <a class="btn btn-sm btn-outline-success" href="{{ route('listings.index') }}">My listings</a>

@@ -12,6 +12,7 @@ use App\Services\ContactAccessService;
 use App\Services\EnquiryService;
 use App\Services\PropertySearch;
 use App\Services\UsageTrackingService;
+use App\Support\TrustBadges;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -99,6 +100,8 @@ class PropertyController extends Controller
             'enquiry' => $viewer ? Enquiry::where('property_id', $property->id)->where('from_user_id', $viewer->id)->first() : null,
             'isSaved' => $viewer ? SavedProperty::where('property_id', $property->id)->where('user_id', $viewer->id)->exists() : false,
             'isOwner' => $isOwner,
+            'posterBadges' => $limitReached ? [] : TrustBadges::forPoster($property->user, $property->posted_by),
+            'propertyBadges' => $limitReached ? [] : TrustBadges::forProperty($property),
         ]);
     }
 
